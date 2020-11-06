@@ -1,1 +1,1 @@
-# AzureDataFactoryTemplate
+Initialized by Azure Data Factory!
