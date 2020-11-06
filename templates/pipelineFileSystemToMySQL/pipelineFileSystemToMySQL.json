@@ -1,0 +1,937 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"FileServerLanding": {
+			"type": "string"
+		},
+		"AzureMySqlDemoNov20": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipelineFileSystemToMySQL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LandingRC1 - FileSystem to MySQL",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "AzureMySqlSink",
+								"writeBatchSize": 10000,
+								"writeBatchTimeout": "00:00:30",
+								"preCopyScript": "truncate table DraftLandingTable;"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "LANDING",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Landing",
+											"type": "String",
+											"physicalType": "char"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "LandingExcelFileRC1",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureMySqlDraftLanding",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "LandingRC2 - FileSystem to MySQL",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "LandingRC1 - FileSystem to MySQL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "AzureMySqlSink",
+								"writeBatchSize": 10000,
+								"writeBatchTimeout": "00:00:30"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "LANDING",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Landing",
+											"type": "String",
+											"physicalType": "char"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "LandingExcelFileRC2",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureMySqlDraftLanding",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "LandingRC3 FileSystem to MySQL",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "LandingRC2 - FileSystem to MySQL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "AzureMySqlSink",
+								"writeBatchSize": 10000,
+								"writeBatchTimeout": "00:00:30"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "LANDING",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Landing",
+											"type": "String",
+											"physicalType": "char"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "LandingExcelFileRC3",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureMySqlDraftLanding",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "LandingRC4 FileSystem to MySQL",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "LandingRC3 FileSystem to MySQL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "AzureMySqlSink",
+								"writeBatchSize": 10000,
+								"writeBatchTimeout": "00:00:30"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "LANDING",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Landing",
+											"type": "String",
+											"physicalType": "char"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "LandingExcelFileRC4",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureMySqlDraftLanding",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "LandingRC5 FileSystem to MySQL",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "LandingRC4 FileSystem to MySQL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "AzureMySqlSink",
+								"writeBatchSize": 10000,
+								"writeBatchTimeout": "00:00:30"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TipoDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NumeroDocumento",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Disponible",
+											"type": "Decimal",
+											"physicalType": "decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FechaDisponibleAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "LANDING",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Landing",
+											"type": "String",
+											"physicalType": "char"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "LandingExcelFileRC5",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureMySqlDraftLanding",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2020-11-04T01:45:25Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LandingExcelFileRC1')]",
+				"[concat(variables('factoryId'), '/datasets/AzureMySqlDraftLanding')]",
+				"[concat(variables('factoryId'), '/datasets/LandingExcelFileRC2')]",
+				"[concat(variables('factoryId'), '/datasets/LandingExcelFileRC3')]",
+				"[concat(variables('factoryId'), '/datasets/LandingExcelFileRC4')]",
+				"[concat(variables('factoryId'), '/datasets/LandingExcelFileRC5')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LandingExcelFileRC1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('FileServerLanding')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "RC-01",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "LANDING 02-11-20.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "TipoDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Nombre",
+						"type": "String"
+					},
+					{
+						"name": "NumeroDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Disponible",
+						"type": "String"
+					},
+					{
+						"name": "FechaDisponibleAL",
+						"type": "String"
+					},
+					{
+						"name": "LANDING",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureMySqlDraftLanding')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('AzureMySqlDemoNov20')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureMySqlTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "draftlandingtable"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LandingExcelFileRC2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('FileServerLanding')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "RC-02",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "LANDING 02-11-20.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "TipoDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Nombre",
+						"type": "String"
+					},
+					{
+						"name": "NumeroDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Disponible",
+						"type": "String"
+					},
+					{
+						"name": "FechaDisponibleAL",
+						"type": "String"
+					},
+					{
+						"name": "LANDING",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LandingExcelFileRC3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('FileServerLanding')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "RC-03",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "LANDING 02-11-20.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "TipoDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Nombre",
+						"type": "String"
+					},
+					{
+						"name": "NumeroDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Disponible",
+						"type": "String"
+					},
+					{
+						"name": "FechaDisponibleAL",
+						"type": "String"
+					},
+					{
+						"name": "LANDING",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LandingExcelFileRC4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('FileServerLanding')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "RC-04",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "LANDING 02-11-20.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "TipoDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Nombre",
+						"type": "String"
+					},
+					{
+						"name": "NumeroDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Disponible",
+						"type": "String"
+					},
+					{
+						"name": "FechaDisponibleAL",
+						"type": "String"
+					},
+					{
+						"name": "LANDING",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LandingExcelFileRC5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('FileServerLanding')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "RC-05",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "LANDING 02-11-20.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "TipoDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Nombre",
+						"type": "String"
+					},
+					{
+						"name": "NumeroDocumento",
+						"type": "String"
+					},
+					{
+						"name": "Disponible",
+						"type": "String"
+					},
+					{
+						"name": "FechaDisponibleAL",
+						"type": "String"
+					},
+					{
+						"name": "LANDING",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		}
+	]
+}
