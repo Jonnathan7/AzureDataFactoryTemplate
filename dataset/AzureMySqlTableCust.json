@@ -1,0 +1,16 @@
+{
+	"name": "AzureMySqlTableCust",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureMySqlDemoNov20",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureMySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "dimcustomer"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

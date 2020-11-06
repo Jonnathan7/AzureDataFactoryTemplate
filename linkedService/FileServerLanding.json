@@ -1,0 +1,17 @@
+{
+	"name": "FileServerLanding",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "\\\\LAPTOP-UL4G84D1\\Compartido\\",
+			"userId": "Equipo",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIzN2NkODk1NS04ZTZmLTQxMjYtOTBkZS1jYzI2ZGY5NTBjMzQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IRCratiLaptop2020",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

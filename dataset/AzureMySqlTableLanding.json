@@ -1,0 +1,16 @@
+{
+	"name": "AzureMySqlTableLanding",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureMySqlDemoNov20",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureMySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "landingtable"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

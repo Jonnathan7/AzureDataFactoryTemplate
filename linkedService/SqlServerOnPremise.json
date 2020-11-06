@@ -1,0 +1,16 @@
+{
+	"name": "SqlServerOnPremise",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=LAPTOP-UL4G84D1\\ARCHITECT;initial catalog=AdventureWorksDW2019;user id=sa",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIwMzBkMDc1MS0yZDA3LTQyYWEtOTkyNi1kYmM3NjY1N2JiYmUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IRCratiLaptop2020",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

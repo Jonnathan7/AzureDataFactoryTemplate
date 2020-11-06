@@ -1,0 +1,47 @@
+{
+	"name": "LandingExcelBlobRC1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageLanding",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "RC-01",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "LANDING 02-11-20.xlsx",
+				"container": "landing-input"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "TipoDocumento",
+				"type": "String"
+			},
+			{
+				"name": "Nombre",
+				"type": "String"
+			},
+			{
+				"name": "NumeroDocumento",
+				"type": "String"
+			},
+			{
+				"name": "Disponible",
+				"type": "String"
+			},
+			{
+				"name": "FechaDisponibleAL",
+				"type": "String"
+			},
+			{
+				"name": "LANDING",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
