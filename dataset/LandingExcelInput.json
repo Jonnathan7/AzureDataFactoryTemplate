@@ -1,0 +1,21 @@
+{
+	"name": "LandingExcelInput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageLanding",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "RC1",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "landing-input"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

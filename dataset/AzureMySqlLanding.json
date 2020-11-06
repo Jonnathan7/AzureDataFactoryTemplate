@@ -1,0 +1,53 @@
+{
+	"name": "AzureMySqlLanding",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureMySqlDemoNov20",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureMySqlTable",
+		"schema": [
+			{
+				"name": "TipoDocumento",
+				"type": "char",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Nombre",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "NumeroDocumento",
+				"type": "char",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Disponible",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "FechaDisponibleAL",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Landing",
+				"type": "char",
+				"precision": 0,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"tableName": "landingtable"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
